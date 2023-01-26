@@ -2,6 +2,7 @@ var displayArea = document.getElementById('display');
 var timer = null;
 
 var startElm = document.getElementsByClassName('startButton')[0];
+var logElm = document.querySelector('.log');
 startElm.addEventListener('click', function(){
     console.log('start:', timer); 
     var seconds = 0;
@@ -11,6 +12,9 @@ startElm.addEventListener('click', function(){
             displayArea.innerText = seconds;
             console.log(seconds);
         }, 1000);
+
+        var message = '開始';
+        addMessage(message);
     };
 });
 
@@ -20,5 +24,14 @@ stopElm.addEventListener('click', function(){
         console.log('stop:', timer);
         clearInterval(timer);
         timer = null;
+
+        var message = '終了';
+        addMessage(message);
     }
 });
+
+function addMessage(message) {
+    var messageElm = document.createElement('div');
+    messageElm.innerText = message;
+    logElm.appendChild(messageElm);
+};
