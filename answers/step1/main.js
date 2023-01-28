@@ -1,3 +1,23 @@
+var startButton = document.getElementsByClassName('startButton')[0];
+var stopButton = document.getElementsByClassName('stopButton')[0];
+var logElm = document.querySelector('.log');
+
+// 初期状態ではスタートボタンのみ有効
+changeButtonActive(true, false);
+
+var options = {
+    color: 'red',
+    backgroundColor: 'black'
+};
+
+stopWatch(options);
+// stopWatch();
+
+function changeButtonActive(start, stop) {
+    startButton.disabled = !start;
+    stopButton.disabled = !stop;
+}
+
 function stopWatch(options) {
     function addMessage(message) {
         var messageElm = document.createElement('div');
@@ -5,6 +25,7 @@ function stopWatch(options) {
         var time = now.getHours() + '時' + now.getMinutes() + '分' + now.getSeconds() + '秒';
         messageElm.innerText = time + ' ' + message;
         messageElm.classList = ['message'];
+        // 最新のログを一番上に表示
         var theFirstChild = logElm.firstChild;
         logElm.insertBefore(messageElm, theFirstChild);
     };
@@ -18,9 +39,9 @@ function stopWatch(options) {
 
     var timer = null;
 
-    var startElm = document.getElementsByClassName('startButton')[0];
-    var logElm = document.querySelector('.log');
-    startElm.addEventListener('click', function(){
+    startButton.addEventListener('click', function(){
+        // ストップボタンのみ有効
+        changeButtonActive(false, true);
         console.log('start:', timer); 
         var seconds = 0;
         if (timer === null) { // すでにstartされている場合は何もしない
@@ -35,9 +56,10 @@ function stopWatch(options) {
         };
     });
 
-    var stopElm = document.getElementsByClassName('stopButton')[0];
-    stopElm.addEventListener('click', function(){
+    stopButton.addEventListener('click', function(){
         if (timer !== null) { // カウントアップ中のみ停止可能
+            // スタートボタンのみ有効
+            changeButtonActive(true, false);
             console.log('stop:', timer);
             clearInterval(timer);
             timer = null;
@@ -47,11 +69,3 @@ function stopWatch(options) {
         }
     });
 }
-
-var options = {
-    color: 'blue',
-    backgroundColor: 'black'
-};
-
-stopWatch(options);
-// stopWatch();
