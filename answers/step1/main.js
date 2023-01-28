@@ -5,7 +5,8 @@ function stopWatch(options) {
         var time = now.getHours() + '時' + now.getMinutes() + '分' + now.getSeconds() + '秒';
         messageElm.innerText = time + ' ' + message;
         messageElm.classList = ['message'];
-        logElm.appendChild(messageElm);
+        var theFirstChild = logElm.firstChild;
+        logElm.insertBefore(messageElm, theFirstChild);
     };
 
     options = options || {};
