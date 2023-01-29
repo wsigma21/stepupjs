@@ -44,7 +44,7 @@ function stopWatch(options) {
     startButton.addEventListener('click', function(){
         // 起動中はポーズボタンのみ有効
         changeButtonActive(false, true, false);
-        console.log('start:', timer); 
+        // console.log('start:', timer); 
         if (timer === null) { // すでにstartされている場合は何もしない
             var message = '開始';
         } else {
@@ -54,7 +54,7 @@ function stopWatch(options) {
         timer = setInterval(function(){
             seconds++;
             displayElm.innerText = seconds;
-            console.log(seconds);
+            // console.log(seconds);
         }, 1000);
         addMessage(message);
     });
@@ -63,7 +63,7 @@ function stopWatch(options) {
         if (timer !== null) { // カウントアップ中のみ停止可能
             // 中断中はスタート・クリアボタン有効
             changeButtonActive(true, false, true);
-            console.log('pause:', timer);
+            // console.log('pause:', timer);
             clearInterval(timer);
 
             var message = '中断';
@@ -79,7 +79,7 @@ function stopWatch(options) {
             timer = null;
             seconds = 0;
             displayElm.innerText = seconds;
-            console.log('clear:', timer);
+            // console.log('clear:', timer);
 
             var message = 'クリア';
             addMessage(message);
