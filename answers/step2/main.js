@@ -25,7 +25,7 @@ function stopWatch(options = {}){
         // const time = now.getHours() + '時' + now.getMinutes() + '分' + now.getSeconds() + '秒';
         const time = `${now.getHours()}時${now.getMinutes()}分${now.getSeconds()}秒`;
         messageElm.innerText = `${time} ${message}`;
-        messageElm.classList = ['message'];
+        messageElm.classList.add('message');
         logElm.appendChild(messageElm);
     };
 

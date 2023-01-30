@@ -24,7 +24,7 @@ function stopWatch(options) {
         var now = new Date();
         var time = now.getHours() + '時' + now.getMinutes() + '分' + now.getSeconds() + '秒';
         messageElm.innerText = time + ' ' + message;
-        messageElm.classList = ['message'];
+        messageElm.classList.add('message');
         // 最新のログを一番上に表示
         var theFirstChild = logElm.firstChild;
         logElm.insertBefore(messageElm, theFirstChild);
