@@ -17,18 +17,40 @@ class PhotoViewer {
         prevButtonElm.addEventListener('click', () => {
             this.prev();
         });
-
+        this.renderImageUrls();
         this.updatePhoto();
+    }
+
+    renderImageUrls() {
+        const imagesElm = this.rootElm.querySelector('.images');
+        for (let i = 0; i < this.images.length; i++) {
+            let liElm = document.createElement('li');
+            liElm.innerHTML = this.images[i]
+            imagesElm.appendChild(liElm);
+        }
+        
     }
 
     updatePhoto() {
         const frameElm = this.rootElm.querySelector('.frame');
-        const image = this.images[this.currentIndex % this.images.length];
+        const imageIndex = this.currentIndex % this.images.length;
+        const image = this.images[imageIndex];
         frameElm.innerHTML = `
             <div class="currentImage">
+                <p>${imageIndex + 1}枚目</p>
                 <img src="${image}" />
             </div>
         `;
+        this.startTimer();
+    }
+
+    startTimer() {
+        if(this.timerKey) {
+            clearTimeout(this.timerKey);
+        }
+        this.timerKey = setTimeout(() => {
+            this.next();
+        }, 3000);
     }
 
     next() {
