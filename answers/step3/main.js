@@ -23,9 +23,13 @@ class PhotoViewer {
 
     renderImageUrls() {
         const imagesElm = this.rootElm.querySelector('.images');
-        for (let i = 0; i < this.images.length; i++) {
+        // for (let i = 0; i < this.images.length; i++) {
+        for (const image of this.images) {
             let liElm = document.createElement('li');
-            liElm.innerHTML = this.images[i]
+            let aTag = document.createElement('a');
+            aTag.href = image;
+            aTag.innerText = image;
+            liElm.appendChild(aTag);
             imagesElm.appendChild(liElm);
         }
         
