@@ -4,7 +4,7 @@ class PhotoViewer {
         // インスタンス変数で持つ
         this.rootElm = rootElm;
         this.images = images;
-        this.interVal = interVal;
+        this.interVal = interVal || 3;
         this.currentIndex = 0; // 初期値
     }
 
@@ -53,6 +53,7 @@ class PhotoViewer {
         if(this.timerKey) {
             clearTimeout(this.timerKey);
         }
+        console.log(this.interVal);
         this.timerKey = setTimeout(() => {
             this.next();
         }, this.interVal * 1000);
@@ -76,4 +77,5 @@ const images = [
 
 const interVal = 1;
 
-new PhotoViewer(document.getElementById('photoViewer'), images, interVal).init();
+// new PhotoViewer(document.getElementById('photoViewer'), images, interVal).init();
+new PhotoViewer(document.getElementById('photoViewer'), images).init();
