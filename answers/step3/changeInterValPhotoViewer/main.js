@@ -4,7 +4,7 @@ class PhotoViewer {
         // インスタンス変数で持つ
         this.rootElm = rootElm;
         this.images = images;
-        this.interVal = interVal || 3;
+        this.interVal = interVal || 3; // 初期値は3秒に設定
         this.currentIndex = 0; // 初期値
     }
 
@@ -56,7 +56,7 @@ class PhotoViewer {
         console.log(this.interVal);
         this.timerKey = setTimeout(() => {
             this.next();
-        }, this.interVal * 1000);
+        }, this.interVal * 1000); // ここでミリ秒に変換
     }
 
     next() {
