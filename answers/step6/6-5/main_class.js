@@ -4,11 +4,12 @@ class AreaSelector {
 
   constructor(rootElm) {
     this.rootElm = rootElm;
+    this.prefectures = [];
+    this.cities = [];
+    this.prefCode = null;
   }
 
   async init() {
-    this.prefSelectorElm = this.rootElm.querySelector('.prefectures');
-    this.citySelectorElm = this.rootElm.querySelector('.cities');
     await this.updatePref();
     await this.updateCity();
   }
@@ -18,20 +19,23 @@ class AreaSelector {
     return await prefResponse.json();
   }
 
-  async getCities(cityCode) {
-    const cityResponse = await fetch(`./cities/${cityCode}.json`);
+  async getCities(prefCode) {
+    const cityResponse = await fetch(`./cities/${prefCode}.json`);
     return await cityResponse.json();
   }
 
   async updatePref() {
-    const prefs = await this.getPrefs();
-    this.createPrefOptionsHtml(prefs);
+    // const prefs = await this.getPrefs();
+    this.prefectures = await this.getPrefs();
+    this.prefCode = this.prefectures[0].code;
+    this.createPrefOptionsHtml();
   } 
 
   async updateCity() {
     // const prefSelectorElm = this.rootElm.querySelector('.prefectures');
-    const cities = await this.getCities(this.prefSelectorElm.value);
-    this.createCityOptionsHtml(cities);
+    // const cities = await this.getCities(prefSelectorElm.value);
+    this.cities = await this.getCities(this.prefCode);
+    this.createCityOptionsHtml();
   }
 
   createOptionTags(arrays) {
@@ -46,20 +50,22 @@ class AreaSelector {
     return strs
   }
 
-  createPrefOptionsHtml(prefs) {
-    const optionStrs = this.createOptionTags(prefs);
-    // const prefSelectorElm = this.rootElm.querySelector('.prefectures');
-    this.prefSelectorElm.innerHTML = optionStrs.join('');
+  createPrefOptionsHtml() {
+    const prefSelectorElm = this.rootElm.querySelector('.prefectures');
+    const optionStrs = this.createOptionTags(this.prefectures);
+    prefSelectorElm.innerHTML = optionStrs.join('');
 
-    this.prefSelectorElm.addEventListener('change', (event) => {
+    prefSelectorElm.addEventListener('change', (event) => {
+      this.prefCode = event.target.value;
+      // console.log("event.target.value=", event.target.value);
       this.updateCity();
     });
   } 
 
-  createCityOptionsHtml(cities) {
-    const optionStrs = this.createOptionTags(cities);
-    // const citySelectorElm = this.rootElm.querySelector('.cities');
-    this.citySelectorElm.innerHTML = optionStrs.join('');
+  createCityOptionsHtml() {
+    const citySelectorElm = this.rootElm.querySelector('.cities');
+    const optionStrs = this.createOptionTags(this.cities);
+    citySelectorElm.innerHTML = optionStrs.join('');
   }
 }
 
