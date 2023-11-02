@@ -38,22 +38,19 @@ class AreaSelector {
     this.createCityOptionsHtml();
   }
 
-  createOptionTags(arrays) {
-    const strs = [];
-    for(const a of arrays) {
-      strs.push(`
-        <option name="${a.name}" value="${a.code}">
-          ${a.name}
+  createOptionTags(records) {
+    return records.map((record) => {
+      return `
+        <option name="${record.name}" value="${record.code}">
+          ${record.name}
         </option>
-      `);
-    }
-    return strs
+      `;
+    }).join('');
   }
 
   createPrefOptionsHtml() {
     const prefSelectorElm = this.rootElm.querySelector('.prefectures');
-    const optionStrs = this.createOptionTags(this.prefectures);
-    prefSelectorElm.innerHTML = optionStrs.join('');
+    prefSelectorElm.innerHTML = this.createOptionTags(this.prefectures);
 
     prefSelectorElm.addEventListener('change', (event) => {
       this.prefCode = event.target.value;
@@ -64,8 +61,7 @@ class AreaSelector {
 
   createCityOptionsHtml() {
     const citySelectorElm = this.rootElm.querySelector('.cities');
-    const optionStrs = this.createOptionTags(this.cities);
-    citySelectorElm.innerHTML = optionStrs.join('');
+    citySelectorElm.innerHTML = this.createOptionTags(this.cities);
   }
 }
 
