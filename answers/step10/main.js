@@ -27,7 +27,7 @@ class WordQuiz{
 
   /**
    * `最終問題かどうか判断する`
-   * @returns {boolean}
+   * @return {boolean}
    */
   isLastStep() {
     const questionNum = Object.keys(this.quizData[this.gameStatus.level]).length;
@@ -58,6 +58,24 @@ class WordQuiz{
       question: currentQuestion,
       selectedAnswer: answer,
     })
+  }
+
+  /**
+   * `ゲームのスコアを計算する`
+   * @return {int}
+   */
+  calcScore() {
+    let correctNum = 0;
+    const results = this.gameStatus.results;
+    for (const result of results) {
+      const correct = result.question.answer;
+      const selected = result.selectedAnswer;
+      if (correct === selected) {
+        correctNum++;
+      }
+    }
+    // console.log(`正解数:${correctNum}`);
+    return Math.floor((correctNum / results.length) * 100);
   }
 
   /**
@@ -153,8 +171,10 @@ class WordQuiz{
    * 結果画面を表示する
    */
   displayResultView() {
+    const score = this.calcScore();
     const html = `
       <p>ゲーム終了</p>
+      <p>正解率:${score}%</p>
       <button id='resetBtn'>開始画面に戻る</button>
     `;
 
