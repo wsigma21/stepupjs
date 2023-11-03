@@ -19,11 +19,11 @@ class WordQuiz{
   }
 
   displayStartView() {
-    const levelArray = Object.keys(this.quizData);
-    console.log("levelArray=", levelArray);
-    let optionStrs = [];
-    for (let i = 0; i < levelArray.length; i++) {
-      optionStrs.push(`<option name="level" value="${levelArray[i]}">
+    const levelStrs = Object.keys(this.quizData);
+    // console.log("levelStrs=", levelStrs);
+    const optionStrs = [];
+    for (let i = 0; i < levelStrs.length; i++) {
+      optionStrs.push(`<option name="level" value="${levelStrs[i]}">
         レベル${i+1}
       </option>
       `)
@@ -42,7 +42,8 @@ class WordQuiz{
       this.displayQuestionView();
     });
 
-    this.rootElm.appendChild(parentElm);
+    // this.rootElm.appendChild(parentElm);
+    this.replaceView(parentElm);
   }
 
   displayQuestionView() {
@@ -52,13 +53,16 @@ class WordQuiz{
     `;
 
     const parentElm = document.createElement('div');
+    parentElm.className = 'question';
     parentElm.innerHTML = html;
-    this.rootElm.appendChild(parentElm);
-
+    // this.rootElm.appendChild(parentElm);
+    this.replaceView(parentElm);
+    
     const retireBtn = document.querySelector('#retireBtn');
     retireBtn.addEventListener('click', () => {
       this.displayResultView();
     });
+
   }
 
   displayResultView() {
@@ -66,9 +70,23 @@ class WordQuiz{
       <p>ゲーム終了</p>
       <button id='resetBtn'>開始画面に戻る</button>
     `;
+
     const parentElm = document.createElement('div');
+    parentElm.className = 'results';
     parentElm.innerHTML = html;
-    this.rootElm.appendChild(parentElm);
+    this.replaceView(parentElm);
+    
+    const resetBtn = document.querySelector('#resetBtn');
+    resetBtn.addEventListener('click', () => {
+      this.displayStartView();
+    });
+
+  }
+
+  replaceView(elm) {
+    // 初期化
+    this.rootElm.innerHTML = '';
+    this.rootElm.appendChild(elm);
   }
 }
 
