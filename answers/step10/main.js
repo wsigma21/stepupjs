@@ -1,10 +1,10 @@
 class WordQuiz{
   constructor(rootElm) {
     this.rootElm = rootElm;
-    // ゲームのステータス
-    this.gameStatus = {
-      level: null // 選択されたレベル
-    };
+    // ゲームのステータスの定義
+    this.gameStatus = {};
+    // 初期化
+    this.resetGame();
   }
   
   async init() {
@@ -13,7 +13,7 @@ class WordQuiz{
   }
 
   /**
-   * クイズの中身をJSOnで取得する
+   * `クイズの中身をJSOnで取得する`
    */
   async fetchQuizData() {
     try {
@@ -23,6 +23,35 @@ class WordQuiz{
       this.rootElm.innerText = '問題の読み込みに失敗しました';
       console.error(e);
     }
+  }
+
+  /**
+   * `最終問題かどうか判断する`
+   * @returns {boolean}
+   */
+  isLastStep() {
+    const questionNum = Object.keys(this.quizData[this.gameStatus.level]).length;
+    return questionNum === this.gameStatus.step;
+  }
+
+  /**
+   * `次の設問または結果画面に進む`
+   */
+  nextStep() {
+    if (this.isLastStep()) {
+      this.displayResultView();
+    } else {
+      this.gameStatus.step++;
+      this.displayQuestionView();
+    }
+  }
+
+  /**
+   * `ゲームのステータスの初期化を行う`
+   */
+  resetGame() {
+    this.gameStatus.level = null; // 選択されたレベル
+    this.gameStatus.step = 1; //現在表示している設問の番号
   }
 
   /**
@@ -66,21 +95,43 @@ class WordQuiz{
    * `出題画面を表示する`
    */
   displayQuestionView() {
-    console.log(`選択中のレベル：${this.gameStatus.level}`);
+    // console.log(`選択中のレベル：${this.gameStatus.level}`);
+
+    // 試しに1問目を表示
+    const stepKey = `step${this.gameStatus.step}`;
+    const currentQuestion = this.quizData[this.gameStatus.level][stepKey];
+    const choices = currentQuestion.choices;
+    const question = currentQuestion.word;
+    const choiceStrs = [];
+    for (const choice of choices) {
+      choiceStrs.push(`
+        <label>
+          <input type="radio" name="choice" value="${choice}">
+          ${choice}
+          </input>
+        </label>
+      `);
+    }
 
     const html = `
-      <p>ゲームを開始しました</p>
-      <button id="retireBtn">ゲームを終了する</button>
-    `;
+      <p>${question}</p>
+      <div>
+        ${choiceStrs.join('')}
+      </div>
+      <div class="actions">
+      <button id="nextBtn">解答する</button>
+      </div>
+    `
 
     const parentElm = document.createElement('div');
     parentElm.className = 'question';
     parentElm.innerHTML = html;
     this.replaceView(parentElm);
     
-    const retireBtnElm = parentElm.querySelector('#retireBtn');
-    retireBtnElm.addEventListener('click', () => {
-      this.displayResultView();
+    const nextBtn = parentElm.querySelector('#nextBtn');
+    nextBtn.addEventListener('click', () => {
+      // this.displayResultView();
+      this.nextStep();
     });
     
   }
@@ -101,6 +152,7 @@ class WordQuiz{
     
     const resetBtnElm = parentElm.querySelector('#resetBtn');
     resetBtnElm.addEventListener('click', () => {
+      this.resetGame()
       this.displayStartView();
     });
     
