@@ -30,7 +30,8 @@ class WordQuiz{
    */
   displayStartView() {
     const levelStrs = Object.keys(this.quizData);
-    // console.log("levelStrs=", levelStrs);
+    // 初期化
+    this.gameStatus.level = levelStrs[0];
     const optionStrs = [];
     for (let i = 0; i < levelStrs.length; i++) {
       optionStrs.push(`<option name="level" value="${levelStrs[i]}">
@@ -47,6 +48,11 @@ class WordQuiz{
     const parentElm = document.createElement('div');
     parentElm.innerHTML = html;
 
+    const selectElm = parentElm.querySelector('.levelSelector')
+    selectElm.addEventListener('change', (event) => {
+      this.gameStatus.level = event.target.value;
+    });
+
     const startBtnElm = parentElm.querySelector('#startBtn');
     startBtnElm.addEventListener('click', () => {
       this.displayQuestionView();
@@ -60,6 +66,8 @@ class WordQuiz{
    * `出題画面を表示する`
    */
   displayQuestionView() {
+    console.log(`選択中のレベル：${this.gameStatus.level}`);
+
     const html = `
       <p>ゲームを開始しました</p>
       <button id="retireBtn">ゲームを終了する</button>
