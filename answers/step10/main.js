@@ -32,6 +32,39 @@ class WordQuiz{
       <select class="levelSelector">
         ${optionStrs.join('')}
       </select>
+      <button id='startBtn'>スタート</button>
+    `;
+    const parentElm = document.createElement('div');
+    parentElm.innerHTML = html;
+
+    const startBtnElm = parentElm.querySelector('#startBtn');
+    startBtnElm.addEventListener('click', () => {
+      this.displayQuestionView();
+    });
+
+    this.rootElm.appendChild(parentElm);
+  }
+
+  displayQuestionView() {
+    const html = `
+      <p>ゲームを開始しました</p>
+      <button id="retireBtn">ゲームを終了する</button>
+    `;
+
+    const parentElm = document.createElement('div');
+    parentElm.innerHTML = html;
+    this.rootElm.appendChild(parentElm);
+
+    const retireBtn = document.querySelector('#retireBtn');
+    retireBtn.addEventListener('click', () => {
+      this.displayResultView();
+    });
+  }
+
+  displayResultView() {
+    const html = `
+      <p>ゲーム終了</p>
+      <button id='resetBtn'>開始画面に戻る</button>
     `;
     const parentElm = document.createElement('div');
     parentElm.innerHTML = html;
