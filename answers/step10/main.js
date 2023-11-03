@@ -160,7 +160,6 @@ class WordQuiz{
   displayQuestionView() {
     this.setTimer();
 
-    // 試しに1問目を表示
     const stepKey = `step${this.gameStatus.step}`;
     const currentQuestion = this.quizData[this.gameStatus.level][stepKey];
     const choices = currentQuestion.choices;
