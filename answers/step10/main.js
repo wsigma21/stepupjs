@@ -68,14 +68,13 @@ class WordQuiz{
     const parentElm = document.createElement('div');
     parentElm.className = 'question';
     parentElm.innerHTML = html;
-    // this.rootElm.appendChild(parentElm);
     this.replaceView(parentElm);
     
-    const retireBtn = document.querySelector('#retireBtn');
-    retireBtn.addEventListener('click', () => {
+    const retireBtnElm = parentElm.querySelector('#retireBtn');
+    retireBtnElm.addEventListener('click', () => {
       this.displayResultView();
     });
-
+    
   }
 
   /**
@@ -91,12 +90,12 @@ class WordQuiz{
     parentElm.className = 'results';
     parentElm.innerHTML = html;
     this.replaceView(parentElm);
-
-    const resetBtn = document.querySelector('#resetBtn');
-    resetBtn.addEventListener('click', () => {
+    
+    const resetBtnElm = parentElm.querySelector('#resetBtn');
+    resetBtnElm.addEventListener('click', () => {
       this.displayStartView();
     });
-
+    
   }
 
   /**
