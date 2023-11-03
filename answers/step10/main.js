@@ -38,6 +38,7 @@ class WordQuiz{
    * `次の設問または結果画面に進む`
    */
   nextStep() {
+    this.clearTimer();
     this.addResult();
     if (this.isLastStep()) {
       this.displayResultView();
@@ -85,6 +86,35 @@ class WordQuiz{
     this.gameStatus.results = []; // プレイヤーの解答結果
     this.gameStatus.level = null; // 選択されたレベル
     this.gameStatus.step = 1; //現在表示している設問の番号
+    this.gameStatus.timeLimit = 0; // 1問ごとの制限時間
+    this.gameStatus.intervalKey = null; // setIntervalのキー
+  }
+
+  /**
+   * `解答制限時間のタイマーをセットする`
+   */
+  setTimer() {
+    if (this.gameStatus.intervalKey != null) {
+      throw new Error('タイマーがまだ動いています');
+    }
+    this.gameStatus.timeLimit = 10;
+    this.gameStatus.intervalKey = setInterval(() => {
+      this.gameStatus.timeLimit--;
+      // console.log(`解答時間は残り${this.gameStatus.timeLimit}秒です`);
+      if (this.gameStatus.timeLimit === 0) {
+        this.nextStep();
+      } else {
+        this.renderTimeLimitStr();
+      }
+    }, 1000);
+  }
+
+  /**
+   * `解答制限時間のタイマーをクリアする`
+   */
+  clearTimer() {
+    clearInterval(this.gameStatus.intervalKey);
+    this.gameStatus.intervalKey = null;
   }
 
   /**
@@ -128,6 +158,8 @@ class WordQuiz{
    * `出題画面を表示する`
    */
   displayQuestionView() {
+    this.setTimer();
+
     // 試しに1問目を表示
     const stepKey = `step${this.gameStatus.step}`;
     const currentQuestion = this.quizData[this.gameStatus.level][stepKey];
@@ -150,8 +182,9 @@ class WordQuiz{
         ${choiceStrs.join('')}
       </div>
       <div class="actions">
-      <button id="nextBtn">解答する</button>
+        <button id="nextBtn">解答する</button>
       </div>
+      <p id="sec">残り解答時間：${this.gameStatus.timeLimit}秒</p>
     `
 
     const parentElm = document.createElement('div');
@@ -164,7 +197,14 @@ class WordQuiz{
       // this.displayResultView();
       this.nextStep();
     });
-    
+  }
+
+  /**
+   * `解答制限時間を表示する`
+   */
+  renderTimeLimitStr() {
+    const secElm = this.rootElm.querySelector('#sec');
+    secElm.innerText = `残り解答時間：${this.gameStatus.timeLimit}秒`;
   }
 
   /**
