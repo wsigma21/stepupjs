@@ -38,6 +38,7 @@ class WordQuiz{
    * `次の設問または結果画面に進む`
    */
   nextStep() {
+    this.addResult();
     if (this.isLastStep()) {
       this.displayResultView();
     } else {
@@ -47,9 +48,23 @@ class WordQuiz{
   }
 
   /**
+   * `解答結果を保持する`
+   */
+  addResult() {
+    const checkedElm = this.rootElm.querySelector('input[name="choice"]:checked');
+    const answer = checkedElm ? checkedElm.value : '';
+    const currentQuestion = this.quizData[this.gameStatus.level][`step${this.gameStatus.step}`];
+    this.gameStatus.results.push({
+      question: currentQuestion,
+      selectedAnswer: answer,
+    })
+  }
+
+  /**
    * `ゲームのステータスの初期化を行う`
    */
   resetGame() {
+    this.gameStatus.results = []; // プレイヤーの解答結果
     this.gameStatus.level = null; // 選択されたレベル
     this.gameStatus.step = 1; //現在表示している設問の番号
   }
@@ -95,8 +110,6 @@ class WordQuiz{
    * `出題画面を表示する`
    */
   displayQuestionView() {
-    // console.log(`選択中のレベル：${this.gameStatus.level}`);
-
     // 試しに1問目を表示
     const stepKey = `step${this.gameStatus.step}`;
     const currentQuestion = this.quizData[this.gameStatus.level][stepKey];
