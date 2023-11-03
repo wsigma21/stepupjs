@@ -1,6 +1,10 @@
 class WordQuiz{
   constructor(rootElm) {
     this.rootElm = rootElm;
+    // ゲームのステータス
+    this.gameStatus = {
+      level: null // 選択されたレベル
+    };
   }
   
   async init() {
@@ -8,6 +12,9 @@ class WordQuiz{
     this.displayStartView();
   }
 
+  /**
+   * クイズの中身をJSOnで取得する
+   */
   async fetchQuizData() {
     try {
       const response = await fetch('./quiz.json');
@@ -18,6 +25,9 @@ class WordQuiz{
     }
   }
 
+  /**
+   * `スタート画面を表示する`
+   */
   displayStartView() {
     const levelStrs = Object.keys(this.quizData);
     // console.log("levelStrs=", levelStrs);
@@ -46,6 +56,9 @@ class WordQuiz{
     this.replaceView(parentElm);
   }
 
+  /**
+   * `出題画面を表示する`
+   */
   displayQuestionView() {
     const html = `
       <p>ゲームを開始しました</p>
@@ -65,6 +78,9 @@ class WordQuiz{
 
   }
 
+  /**
+   * 結果画面を表示する
+   */
   displayResultView() {
     const html = `
       <p>ゲーム終了</p>
@@ -75,7 +91,7 @@ class WordQuiz{
     parentElm.className = 'results';
     parentElm.innerHTML = html;
     this.replaceView(parentElm);
-    
+
     const resetBtn = document.querySelector('#resetBtn');
     resetBtn.addEventListener('click', () => {
       this.displayStartView();
@@ -83,6 +99,10 @@ class WordQuiz{
 
   }
 
+  /**
+   * `表示内容を入れ替える`
+   * @param {Object} elm 
+   */
   replaceView(elm) {
     // 初期化
     this.rootElm.innerHTML = '';
